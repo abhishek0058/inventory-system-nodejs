@@ -2,10 +2,16 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var admin = require('./routes/admin');
+var store = require('./routes/store');
+var company = require('./routes/company');
+var mobile = require('./routes/mobile');
+var stock = require('./routes/stock');
 
 var app = express();
 
@@ -27,6 +33,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/admin', admin);
+app.use('/company', company);
+app.use('/store', store);
+app.use('/mobile', mobile);
+app.use('/stock', stock);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

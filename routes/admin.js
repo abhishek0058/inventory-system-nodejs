@@ -4,69 +4,50 @@ const pool = require('./pool');
 
 const tableName = 'admin'
 
-function showLogin(req, res) {
-    if (req.session.id) {
-        res.redirect('/admin/home');
-    } else {
-        res.render('Admin/AdminLogin', {
-            msg: true
-        });
-    }
-}
-router.get('/', (req, res) => {
-    showLogin(req, res)
-})
-
 router.get('/home', (req, res) => {
-    if (req.session.id) {
-        const query = `select * from ${tableName} where id = ?`
-        pool.query(query, [req.session.id], (err, result) => {
-            if (err) {
-                res.render('Admin/AdminLogin', {
-                    msg: false
-                });
-            } else if (result[0]) {
-                req.session.id = result[0].id;
-                res.render('Admin/AdminHome', {
-                    result: result[0]
-                });
-            } else {
-                res.render('Admin/AdminLogin', {
-                    msg: false
-                });
-            }
+    if (req.session.adminId) {
+        res.render('admin/home', req.session)
+    } else {
+        res.render('admin/login', {
+            msg: "Please Login"
         })
     }
 })
-router.get('/login', (req, res) => {
-    showLogin(req, res)
 
+router.get('/', (req, res) => {
+    if (req.session.adminId) {
+        res.redirect('/admin/home')
+    } else {
+        res.render('admin/login', {
+            msg: "Please Login"
+        })
+    }
 })
-router.post('/login', (req, res) => {
+
+router.post('/checkLogin', (req, res) => {
     const {
-        adminid,
-        adminpassword
+        id,
+        password
     } = req.body;
-    const query = `select * from ${tableName} where id = ? and password = ? `
-    pool.query(query, [adminid, adminpassword], (err, result) => {
-        if (err) {
-            res.render('Admin/AdminLogin');
-        } else if (result[0]) {
-            req.session.id = result[0].id;
-            res.render('Admin/AdminHome', {
-                result: result[0]
-            });
+    pool.query(`select * from admin where id = ? and password = ?`, [id, password], (err, result) => {
+        if (err) throw err;
+        else if (result.length) {
+            req.session.adminId = result[0].id;
+            req.session.adminName = result[0].name;
+            res.redirect('/admin/home')
         } else {
-            res.render('Admin/AdminLogin', {
-                msg: false
-            });
+            console.log(result)
+            res.render('admin/login', {
+                msg: "Wrong Credentials"
+            })
         }
     })
-});
+})
+
 
 router.get('/logout', (req, res) => {
-    req.session.id = null;
-    res.redirect('/admin');
+    req.session.adminId = null;
+    res.redirect('/admin')
 })
 
 module.exports = router;
