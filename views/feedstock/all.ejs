@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="/assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Mobile
+        Brand
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -23,16 +23,30 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <a href="/mobile">
-                        <button type="button" class="btn btn-info btn-round btn-large">Create New mobile</button>
+                    <a href="/feedstock">
+                        <button type="button" class="btn btn-info btn-round btn-large">Create New Stock</button>
                     </a>
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-info">
-                                <h4 class="card-title ">Your Mobiles</h4>
-                                <p class="card-category"> This is a list of all your mobiles</p>
+                                <h4 class="card-title ">Your Feeded Stocks</h4>
+                                <p class="card-category"> This is a list of all your Feed Stocks</p>
                             </div>
                             <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <select id="brand" class="form-control">
+                                            <option value="0">Select Brand</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select id="model" class="form-control">
+                                            <option value="0">Select Model</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <br><br>
+
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead class=" text-primary">
@@ -40,53 +54,25 @@
                                                 ID
                                             </th>
                                             <th>
-                                                Company
-                                            </th>
-                                            <th>
-                                                Name
-                                            </th>
-                                            <th>
-                                                Model Number
+                                                IMEI Number
                                             </th>
                                             <th>
                                                 Color
                                             </th>
                                             <th>
-                                                Details
+                                                Price
+                                            </th>
+                                            <th>
+                                                Status
+                                            </th>
+                                            <th>
+                                                Assigned Store
                                             </th>
                                             <th>
                                                 Edit
                                             </th>
                                         </thead>
-                                        <tbody>
-
-                                            <% for(var i=0; i<data.length; i++) { %>
-                                            <tr>
-                                                <td>
-                                                    <%=  data[i].id %>
-                                                </td>
-                                                <td>
-                                                    <%=  data[i].company %>
-                                                </td>
-                                                <td>
-                                                    <%=   data[i].name %>
-                                                </td>
-                                                <td>
-                                                    <%=  data[i].modelno %>
-                                                </td>
-                                                <td>
-                                                    <%=  data[i].color %>
-                                                </td>
-                                                <td class="text-primary">
-                                                    <a href="/mobile/details/<%= data[i].id %>">See</a>
-                                                </td>
-                                                <td class="text-info">
-                                                    <a href="/mobile/edit/<%= data[i].id %>">Edit</a>
-                                                </td>
-                                            </tr>
-                                            <% } %>
-
-                                        </tbody>
+                                        <tbody id="feedstocktable"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -119,8 +105,8 @@
     <script src="/assets/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="/assets/js/material-dashboard.min.js?v=2.1.0" type="text/javascript"></script>
-    <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-    <script src="/assets/demo/demo.js"></script>
+    <script src="/javascripts/feedstock.js"></script>
+    <script src="/javascripts/feedstocktable.js"></script>
 </body>
 
 </html>

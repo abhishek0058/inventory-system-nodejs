@@ -29,7 +29,8 @@ router.post('/checkLogin', (req, res) => {
         id,
         password
     } = req.body;
-    pool.query(`select * from admin where id = ? and password = ?`, [id, password], (err, result) => {
+    console.log(req.body)
+    var sql = pool.query(`select * from admin where id = ? and password = ?`, [id, password], (err, result) => {
         if (err) throw err;
         else if (result.length) {
             req.session.adminId = result[0].id;
@@ -42,6 +43,7 @@ router.post('/checkLogin', (req, res) => {
             })
         }
     })
+    console.log(sql)
 })
 
 

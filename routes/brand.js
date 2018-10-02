@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('./pool');
 
-const table = 'company'
+const table = 'brand';
 
 
 router.get('*', (req, res, next) => {
@@ -13,7 +13,7 @@ router.get('*', (req, res, next) => {
 })
 
 router.get('/', (req, res) => {
-    res.render('company/new');
+    res.render(`${table}/new`);
 })
 
 router.post('/create', (req, res) => {
@@ -29,7 +29,7 @@ function all(res) {
     pool.query(`select * from ${table}`, (err, result) => {
         if (err) throw err;
         else {
-            res.render('company/all', {
+            res.render(`${table}/all`, {
                 data: result
             })
         };
@@ -58,7 +58,7 @@ router.get('/details/:id', (req, res) => {
     pool.query(queries, [id, id], (err, result) => {
         if (err) throw err;
         else {
-            res.render('company/details', {
+            res.render(`${table}/details`, {
                 data: result[0],
                 ...result[1][0]
             })
@@ -73,7 +73,7 @@ router.get('/edit/:id', (req, res) => {
     pool.query(`select * from ${table} where id = ?`, id, (err, result) => {
         if (err) throw err;
         else {
-            res.render('company/edit', { ...result[0]
+            res.render(`${table}/edit`, { ...result[0]
             })
         }
     })

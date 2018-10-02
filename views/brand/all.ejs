@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="/assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Company
+        Brand
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -23,28 +23,54 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                        <a href="/company/all">
-                            <button type="button" class="btn btn-info btn-round btn-large">My companys</button>
-                        </a>
+                    <a href="/brand">
+                        <button type="button" class="btn btn-info btn-round btn-large">Create New brand</button>
+                    </a>
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-info">
-                                <h4 class="card-title">Company</h4>
-                                <p class="card-category">Add a new company</p>
+                                <h4 class="card-title ">Your brands</h4>
+                                <p class="card-category"> This is a list of all your brands</p>
                             </div>
                             <div class="card-body">
-                                <form action="/company/create" method="post">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="bmd-label-floating">Name</label>
-                                                <input type="text" class="form-control" name="name" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button type="submit" class="btn btn-info pull-right">Add</button>
-                                    <div class="clearfix"></div>
-                                </form>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class=" text-primary">
+                                            <th>
+                                                ID
+                                            </th>
+                                            <th>
+                                                Name
+                                            </th>
+                                            <th>
+                                                Details
+                                            </th>
+                                            <th>
+                                                Edit
+                                            </th>
+                                        </thead>
+                                        <tbody>
+
+                                            <% for(var i=0; i<data.length; i++) { %>
+                                            <tr>
+                                                <td>
+                                                    <%=  data[i].id %>
+                                                </td>
+                                                <td>
+                                                    <%=   data[i].name %>
+                                                </td>
+                                                <td class="text-primary">
+                                                    <a href="/brand/details/<%= data[i].id %>">See</a>
+                                                </td>
+                                                <td class="text-info">
+                                                    <a href="/brand/edit/<%= data[i].id %>">Edit</a>
+                                                </td>
+                                            </tr>
+                                            <% } %>
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
