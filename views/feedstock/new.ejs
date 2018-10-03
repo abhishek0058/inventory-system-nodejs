@@ -33,66 +33,62 @@
                                 <p class="card-category">Add a new stock</p>
                             </div>
                             <div class="card-body">
-                                <form action="/feedstock/create" method="post">
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        Brand
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <select name="brandid" id="brand" class="form-control" style="width: 100%"
-                                                            required>
-                                                            <option value="0">Select a brand</option>
-                                                        </select>
-                                                    </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    Brand
                                                 </div>
-
+                                                <div class="col-md-8">
+                                                    <select name="brandid" id="brand" class="form-control" style="width: 100%"
+                                                        required>
+                                                        <option value="0">Select a brand</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        Brand
-                                                    </div>
-                                                    <div class="col-md-8">
-                                                        <select name="modelid" id="model" class="form-control" style="width: 100%"
-                                                            required>
-                                                            <option value="0">Select a Model</option>
-                                                        </select>
-                                                    </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    Model
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <select name="modelid" id="model" class="form-control" style="width: 100%"
+                                                        required>
+                                                        <option value="0">Select a Model</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="bmd-label-floating">IMEI Number</label>
-                                                <input type="text" class="form-control" name="imeino" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="bmd-label-floating">Price (optional)</label>
-                                                <input type="text" class="form-control" name="price">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label class="bmd-label-floating">Color</label>
-                                                <input type="text" class="form-control" name="color" required>
-                                            </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">IMEI Number</label>
+                                            <input type="text" class="form-control" id="imeino" required>
                                         </div>
                                     </div>
-
-                                    <button type="submit" class="btn btn-info pull-right">Add</button>
-                                    <div class="clearfix"></div>
-                                </form>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Price (optional)</label>
+                                            <input type="text" class="form-control" id="price">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Color</label>
+                                            <input type="text" class="form-control" id="color" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" id="add" class="btn btn-info pull-right">Add</button>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
                     </div>

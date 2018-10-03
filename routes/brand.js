@@ -43,8 +43,13 @@ router.get('/all', (req, res) => {
 
 router.get('/allJSON', (req, res) => {
     pool.query(`select * from ${table}`, (err, result) => {
-        if (err) throw err;
-        else res.json(result)
+        if (err) {
+            console.log(err);
+            res.status(200).json([])
+        }
+        else {
+            res.json(result)
+        }
     })
 })
 

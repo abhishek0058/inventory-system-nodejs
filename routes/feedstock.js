@@ -16,14 +16,13 @@ router.get('/', (req, res) => {
     res.render(`${table}/new`);
 })
 
-
-
-
 router.post('/create', (req, res) => {
     pool.query(`insert into ${table} set ?`, req.body, (err, result) => {
-        if (err) throw err;
-        else {
-            all(res)
+        if (err) {
+            console.log(err);
+            res.status(500).json(false);
+        } else {
+            res.status(200).json(true);
         }
     })
 })
@@ -43,7 +42,6 @@ router.get('/all', (req, res) => {
     all(res);
 })
 
-
 router.get('/allJSON', (req, res) => {
     pool.query(`select * from ${table}`, (err, result) => {
         if (err) throw err;
@@ -52,10 +50,12 @@ router.get('/allJSON', (req, res) => {
 })
 
 router.get('/all/:modelid', (req, res) => {
-    const { modelid } = req.params;
+    const {
+        modelid
+    } = req.params;
     const query = `select * from feedstock where modelid = ?`;
     pool.query(query, [modelid], (err, result) => {
-        if(err) {
+        if (err) {
             console.log(err);
             res.status(500).json([]);
         } else {
@@ -68,8 +68,8 @@ router.get('/details/:id', (req, res) => {
     const {
         id
     } = req.params;
-    const queries = `select s.*, st.address, st.name as storename, m.name, m.modelno, m.color from stock s, store st, mobile m where s.storeid = st.id and s.mobileid = m.id and s.mobileid in (select id from mobile where companyid = ?);` 
-        +   `select name from company where id = ?;`
+    const queries = `select s.*, st.address, st.name as storename, m.name, m.modelno, m.color from stock s, store st, mobile m where s.storeid = st.id and s.mobileid = m.id and s.mobileid in (select id from mobile where companyid = ?);` +
+        `select name from company where id = ?;`
     pool.query(queries, [id, id], (err, result) => {
         if (err) throw err;
         else {
@@ -94,7 +94,6 @@ router.get('/edit/:id', (req, res) => {
     })
 })
 
-
 router.post('/update', (req, res) => {
     pool.query(`update ${table} set ? where id = ?`, [req.body, req.body.id], (err, result) => {
         if (err) throw err;
@@ -103,7 +102,6 @@ router.post('/update', (req, res) => {
         }
     })
 })
-
 
 router.get('/delete/:id', (req, res) => {
     const {
