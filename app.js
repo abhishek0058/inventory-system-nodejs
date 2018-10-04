@@ -13,6 +13,7 @@ var brand = require('./routes/brand');
 var model = require('./routes/model');
 var feedstock = require('./routes/feedstock');
 var stock = require('./routes/stock');
+var transfers = require('./routes/transfers');
 
 var app = express();
 
@@ -42,7 +43,7 @@ app.use('/brand', brand);
 app.use('/model', model);
 app.use('/feedstock', feedstock);
 app.use('/stock', stock);
-
+app.use('/transfers', transfers);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

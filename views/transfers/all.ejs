@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="/assets/img/favicon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>
-        Model
+        Transfers
     </title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
@@ -23,16 +23,28 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <a href="/model">
-                        <button type="button" class="btn btn-info btn-round btn-large">Create New model</button>
-                    </a>
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-danger">
-                                <h4 class="card-title ">Your models</h4>
-                                <p class="card-category"> This is a list of all your models</p>
+                                <h4 class="card-title ">Transfers</h4>
+                                <p class="card-category"> This is a list of all transfers</p>
                             </div>
                             <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        From: <input type="date" id="date1" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        To: <input type="date" id="date2" class="form-control">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-info" id="searchByDate">
+                                            Filter
+                                        </button>
+                                    </div>
+                                </div>
+                                <h2 id="header"></h2>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead class=" text-primary">
@@ -40,47 +52,19 @@
                                                 ID
                                             </th>
                                             <th>
-                                                Name
+                                                Sender Store
                                             </th>
                                             <th>
-                                                Model Number
+                                                Receiver Store
                                             </th>
                                             <th>
-                                                Brand
+                                                IMEI Number
                                             </th>
                                             <th>
-                                                Details
-                                            </th>
-                                            <th>
-                                                Edit
+                                                Date
                                             </th>
                                         </thead>
-                                        <tbody>
-
-                                            <% for(var i=0; i<data.length; i++) { %>
-                                            <tr>
-                                                <td>
-                                                    <%=  data[i].id %>
-                                                </td>
-                                                <td>
-                                                    <%=   data[i].name %>
-                                                </td>
-                                                <td>
-                                                    <%=   data[i].modelno %>
-                                                </td>
-                                                <td>
-                                                    <%=  data[i].brand %>
-                                                </td>
-                                                <td class="text-primary">
-                                                    <a href="/model/details/<%= data[i].id %>">See</a>
-                                                </td>
-                                                <td class="text-info">
-                                                    <a href="/model/edit/<%= data[i].id %>">Edit</a>
-                                                </td>
-                                            </tr>
-                                            <% } %>
-
-                                        </tbody>
+                                        <tbody id="result"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -113,8 +97,7 @@
     <script src="/assets/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="/assets/js/material-dashboard.min.js?v=2.1.0" type="text/javascript"></script>
-    <!-- Material Dashboard DEMO methods, don't include it in your project! -->
-    <script src="/assets/demo/demo.js"></script>
+    <script src="/javascripts/transfers.js"></script>
 </body>
 
 </html>

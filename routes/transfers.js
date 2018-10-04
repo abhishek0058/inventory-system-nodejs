@@ -12,25 +12,66 @@ router.get('*', (req, res, next) => {
         req.redirect('/admin')
 })
 
-function all(res) {
-    pool.query(`select id, name, modelno, (select name from brand where brand.id = ${table}.brandid) as brand from ${table}`, (err, result) => {
-        if (err) throw err;
-        else {
-            res.render('model/all', {
-                data: result
-            })
-        };
-    })
-}
+router.get('/', (req, res) => {
+    res.render('transfers/all');
+});
 
 router.get('/all', (req, res) => {
-    all(res);
-})
+    const query = `select t.id, t.senderid, t.receiverid, t.imeino, (select name from store where id = t.senderid ) as sender, (select name from store where id = t.receiverid ) as receiver, t.date from transfers t order by date desc`;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json([]);
+        } else {
+            res.status(200).json(result);
+        }
+    })
+});
 
-router.get('/allJSON', (req, res) => {
-    pool.query(`select id, name, modelno, brandid, (select name from brand where brand.id = ${table}.brandid) as brandname from ${table}`, (err, result) => {
-        if (err) throw err;
-        else res.json(result)
+router.get('/searchByDate/:date1/:date2', (req, res) => {
+    const {
+        date1,
+        date2
+    } = req.params;
+    const query = `select t.id, t.senderid, t.receiverid, t.imeino, (select name from store where id = t.senderid ) as sender, (select name from store where id = t.receiverid ) as receiver, t.date from transfers t where date between ? and ?  order by date desc`;
+    pool.query(query, [date1, date2], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json([]);
+        } else {
+            res.status(200).json(result);
+        }
+    })
+});
+
+router.get('/store/:id', (req, res) => {
+    const {
+        id
+    } = req.params;
+    const query = `select t.id, t.senderid, t.receiverid, t.imeino, (select name from store where id = t.senderid ) as sender, (select name from store where id = t.receiverid ) as receiver, t.date from transfers t where id = ?  order by date desc`;
+    pool.query(query, [id], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json([]);
+        } else {
+            res.status(200).json(result);
+        }
+    })
+});
+
+
+router.get('/onDate/:date', (req, res) => {
+    const {
+        date
+    } = req.params;
+    const query = `select t.id, t.senderid, t.receiverid, t.imeino, (select name from store where id = t.senderid ) as sender, (select name from store where id = t.receiverid ) as receiver, t.date from transfers t where date = ? order by date desc`;
+    pool.query(query, [date], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json([]);
+        } else {
+            res.status(200).json(result);
+        }
     })
 });
 
