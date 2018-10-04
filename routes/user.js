@@ -160,13 +160,44 @@ router.post("/update", (req, res) => {
       } else if (result.affectedRows == 0) {
         res.json(false);
       } else {
-        const transferQuery = `insert into transfers (senderid, receiverid, imeino, date) values (?,?,?,CURRENT_DATE())`;
+        const transferQuery = `insert into transfers (senderid, receiverid, imeino, date) values (?,?,?,now())`;
         pool.query(transferQuery, [senderid, receiverid, imeino], (err) => {
           if (err) {
             console.log(err);
             res.json(false);
           } else {
             res.json(true);
+          }
+        });
+      }
+    }
+  );
+});
+
+router.post("/sold", (req, res) => {
+  const {
+    imeino,
+    receiverid,
+    senderid
+  } = req.body;
+  const query = `update feedstock set storeid = 0, storename = 'Sold' where imeino = ? and storeid = ?;`;
+  pool.query(
+    query,
+    [imeino, senderid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.json(false);
+      } else if (result.affectedRows == 0) {
+        res.json("not found");
+      } else {
+        const transferQuery = `insert into sold (storeid, imeino, date) values (?,?, CURRENT_DATE())`;
+        pool.query(transferQuery, [senderid, imeino], (err) => {
+          if (err) {
+            console.log(err);
+            res.json(false);
+          } else {
+            res.json("sold");
           }
         });
       }

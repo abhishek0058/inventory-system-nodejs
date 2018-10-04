@@ -14,6 +14,7 @@ var model = require('./routes/model');
 var feedstock = require('./routes/feedstock');
 var stock = require('./routes/stock');
 var transfers = require('./routes/transfers');
+var sold = require('./routes/sold');
 
 var app = express();
 
@@ -44,6 +45,7 @@ app.use('/model', model);
 app.use('/feedstock', feedstock);
 app.use('/stock', stock);
 app.use('/transfers', transfers);
+app.use('/sold', sold);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
