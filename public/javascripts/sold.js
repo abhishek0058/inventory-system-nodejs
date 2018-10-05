@@ -14,6 +14,9 @@ function makeTable(data) {
                 ${item.imeino}
             </td>
             <td>
+                ${item.modelno}
+            </td>
+            <td>
                 <a id="${item.date}" class="date" href="#">
                     ${change_date_formate(item.date)}
                 </a>

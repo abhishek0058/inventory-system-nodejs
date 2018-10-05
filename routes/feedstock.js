@@ -16,6 +16,25 @@ router.get('/', (req, res) => {
     res.render(`${table}/new`);
 })
 
+router.post('/bulk', (req, res) => {
+    const { totalrows, modelid, brandid } = req.body;
+    let data = [];
+    
+    for(let i=1; i<=parseInt(totalrows); i++) {
+        data[i-1] = [modelid, brandid, req.body[`imeino${i}`], req.body[`price${i}`], req.body[`color${i}`]];
+    }
+
+    const query = `insert into feedstock(modelid, brandid, imeino, price, color) values ?`
+    pool.query(query, [data], (err, result) => {
+        if(err) {
+            console.log(err);
+            res.send(`<h3 style="color: red">Error Occurred</h3>`);
+        } else {
+            res.send(`<h3 style="color: green">Successfully submitted</h3>`)
+        }
+    });
+})
+
 router.post('/create', (req, res) => {
     pool.query(`insert into ${table} set ?`, req.body, (err, result) => {
         if (err) {

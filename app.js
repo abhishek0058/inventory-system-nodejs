@@ -15,6 +15,8 @@ var feedstock = require('./routes/feedstock');
 var stock = require('./routes/stock');
 var transfers = require('./routes/transfers');
 var sold = require('./routes/sold');
+var search=require('./routes/search');
+var dailyreport=require('./routes/dailyreport');
 
 var app = express();
 
@@ -36,6 +38,7 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use('/', indexRouter);
 app.use('/user', user);
 app.use('/admin', admin);
@@ -46,6 +49,9 @@ app.use('/feedstock', feedstock);
 app.use('/stock', stock);
 app.use('/transfers', transfers);
 app.use('/sold', sold);
+app.use('/search',search);
+app.use('/dailyreport',dailyreport);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -13,36 +13,26 @@ $('#brand').change(() => {
         $("#model").append(`<option value="${item.id}">${item.name}</option>`))
 })
 
-$('#add').click(() => {
-    
-    if($('#brand').val() == "0" || $('#model').val() == "0" || $('#imeino').val() == "" || $('#name').val() == "") {
-        alert("Please Fill all the required fields");
-        return;
-    }
+var totalrows = 0;
 
-    var body = {
-        brandid: $('#brand').val(),
-        modelid: $('#model').val(),
-        imeino: $('#imeino').val(),
-        price: $('#price').val(),
-        name: $('#name').val(),
-        color: $('#color').val()
-    };
+function newrow() {
+    totalrows++;
+    $('#totalrows').val(totalrows);
+    return (
+        `<tr>
+            <td>
+                <input type="text" class="form-control" name="imeino${totalrows}" required placeholder="Enter IMEI Number">
+            </td>
+            <td>
+                <input type="text" class="form-control" name="price${totalrows}" placeholder="Price (Optional)">
+            </td>
+            <td>
+                <input type="text" class="form-control" name="color${totalrows}" required placeholder="Enter Color">
+            </td>
+        </tr>`
+    );
+}
 
-    $.post(`/feedstock/create`, body, (result, status) => {
-        console.log(result);
-        if (result == true) {
-            alert("Done");
-            $('#brand').val('');
-            $('#model').val('');
-            $('#imeino').val('');
-            $('#price').val('');
-            $('#name').val('');
-            $('#color').val('');
-        } else {
-            alert("Server Error");
-        }
-    });
+$('#addnewrow').click(() => {
+    $('#rows').append(newrow())
 });
-
-// /feedstock/create

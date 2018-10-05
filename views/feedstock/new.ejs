@@ -18,8 +18,8 @@
 
 </head>
 
-<body class="">
-    <div class="wrapper ">
+<body class="" style="margin-bottom: 100px">
+    <div class="wrapper">
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
@@ -32,64 +32,67 @@
                                 <h4 class="card-title">Feed Stock</h4>
                                 <p class="card-category">Add a new stock</p>
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    Brand
+                            <form action="/feedstock/bulk" method="post">
+                                <input type="hidden" id="totalrows" name="totalrows" >
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        Brand
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <select name="brandid" name="brand" id="brand" class="form-control" style="width: 100%"
+                                                            required>
+                                                            <option value="0">Select a brand</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-8">
-                                                    <select name="brandid" id="brand" class="form-control" style="width: 100%"
-                                                        required>
-                                                        <option value="0">Select a brand</option>
-                                                    </select>
-                                                </div>
-                                            </div>
 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    Model
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <select name="modelid" id="model" class="form-control" style="width: 100%"
-                                                        required>
-                                                        <option value="0">Select a Model</option>
-                                                    </select>
-                                                </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        Model
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <select name="modelid" name="model" id="model" class="form-control" style="width: 100%"
+                                                            required>
+                                                            <option value="0">Select a Model</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn btn-danger" id="addnewrow">
+                                                Add New Row
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td>IMEI Number</td>
+                                                <td>Price (optional)</td>
+                                                <td>Color</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="rows">
+
+                                        </tbody>
+                                    </table>
+
+                                    <div id="rows"></div>
+                                    <button type="submit" id="add" class="btn btn-info pull-right">Add</button>
+                                    <div class="clearfix"></div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="bmd-label-floating">IMEI Number</label>
-                                            <input type="text" class="form-control" id="imeino" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="bmd-label-floating">Price (optional)</label>
-                                            <input type="text" class="form-control" id="price">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="bmd-label-floating">Color</label>
-                                            <input type="text" class="form-control" id="color" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="button" id="add" class="btn btn-info pull-right">Add</button>
-                                <div class="clearfix"></div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -111,8 +114,6 @@
     <script src="/assets/js/core/popper.min.js" type="text/javascript"></script>
     <script src="/assets/js/core/bootstrap-material-design.min.js" type="text/javascript"></script>
     <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <!--  Google Maps Plugin    -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
     <!-- Chartist JS -->
     <script src="/assets/js/plugins/chartist.min.js"></script>
     <!--  Notifications Plugin    -->
