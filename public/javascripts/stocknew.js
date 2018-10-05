@@ -7,25 +7,52 @@ $.getJSON(`/stock/storeAndIMEINumbers`, result => {
         $("#imeinumbers").append(`<option value=${item.imeino}>`))
 });
 
-$('#assign').click(() => {
-    if ($('#store').val() == "0") {
-        alert('Please choose a store');
+// $('#assign').click(() => {
+//     if ($('#store').val() == "0") {
+//         alert('Please choose a store');
+//         return;
+//     }
+//     var imeino = $('#imeino').val();
+
+//     if (imeino != "") {
+//         $.post(`/stock/distribute`, {
+//             imeino: imeino,
+//             storeid: $('#store').val()
+//         }, (result, status) => {
+//             if (result == "true") {
+//                 alert("Done");
+//             } else {
+//                 alert("Server Error Occurred.")
+//             }
+//         })
+//     } else {
+//         alert("Enter an IMEI Number");
+//     }
+// })
+
+let total = 0;
+
+function newRow() {
+    if($('#store').val() == 0) {
+        alert('Please Select a store');
         return;
     }
-    var imeino = $('#imeino').val();
+    total++;
+    $('#total').val(total);
+    return (
+        `<tr>
+        <td>
+            ${total}
+        </td>
+            <td>
+            <input name="imeino${total}" type="number" class="form-control" placeholder="Enter IMEI Number"
+            list="imeinumbers" required>
+            </td>
+        </tr>
+        `
+    );
+}
 
-    if (imeino != "") {
-        $.post(`/stock/distribute`, {
-            imeino: imeino,
-            storeid: $('#store').val()
-        }, (result, status) => {
-            if (result == "true") {
-                alert("Done");
-            } else {
-                alert("Server Error Occurred.")
-            }
-        })
-    } else {
-        alert("Enter an IMEI Number");
-    }
+$('#addnewrow').click(() => {
+    $('#result').append(newRow());
 })

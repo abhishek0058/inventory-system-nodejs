@@ -21,10 +21,10 @@ function newrow() {
     return (
         `<tr>
             <td>
-                <input type="text" class="form-control" name="imeino${totalrows}" required placeholder="Enter IMEI Number">
+                <input type="number" class="form-control" name="imeino${totalrows}" required placeholder="Enter IMEI Number">
             </td>
             <td>
-                <input type="text" class="form-control" name="price${totalrows}" placeholder="Price (Optional)">
+                <input type="number" class="form-control" name="price${totalrows}" placeholder="Price (Optional)">
             </td>
             <td>
                 <input type="text" class="form-control" name="color${totalrows}" required placeholder="Enter Color">

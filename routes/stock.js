@@ -38,6 +38,28 @@ router.post('/distribute', (req, res) => {
             res.status(200).json("true");
         }
     })
+});
+
+router.post('/bulk', (req, res) => {
+    const { store, total } = req.body;
+
+    if(req.body.store == "0") {
+        res.send(`You didn't select a store.\nPlease try again`)
+    } else {
+        let imeiNumbers = [];
+        const query = `update feedstock set storeid = ${store}, storename = (select name from store where id = ${store}) where imeino in (?)`;
+        for(let i=0; i<parseInt(total); i++) {
+            imeiNumbers[i] = [req.body[`imeino${i+1}`]];
+        }
+        pool.query(query, [imeiNumbers], (err, result) => {
+            if(err) {
+                console.log(err);
+                res.send(`An Error Occurred`);
+            } else {
+                res.send(`<h3 style="color: green">Distribution Successful.</h3>`);
+            }
+        })
+    }
 })
 
 router.post('/update', (req, res) => {
