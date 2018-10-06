@@ -1,10 +1,16 @@
+var fallBackDate = [];
 $.getJSON('/store/allJSON', result => {
     $.each(result, (i, item) => {
         $("#store").append(`<option value="${item.id}">${item.name}</option>`)
     })
 });
 
+$('#store').change(() => {
+    makeTable(fallBackDate);
+})
+
 function makeTable(data) {
+    fallBackDate = data;
     var table = '';
     $.each(data, function (i, item) {
         if($('#store').val() == "0" || $('#store').val() == item.storeid) {
