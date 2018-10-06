@@ -7,29 +7,6 @@ $.getJSON(`/stock/storeAndIMEINumbers`, result => {
         $("#imeinumbers").append(`<option value=${item.imeino}>`))
 });
 
-// $('#assign').click(() => {
-//     if ($('#store').val() == "0") {
-//         alert('Please choose a store');
-//         return;
-//     }
-//     var imeino = $('#imeino').val();
-
-//     if (imeino != "") {
-//         $.post(`/stock/distribute`, {
-//             imeino: imeino,
-//             storeid: $('#store').val()
-//         }, (result, status) => {
-//             if (result == "true") {
-//                 alert("Done");
-//             } else {
-//                 alert("Server Error Occurred.")
-//             }
-//         })
-//     } else {
-//         alert("Enter an IMEI Number");
-//     }
-// })
-
 let total = 0;
 
 function newRow() {
@@ -40,7 +17,7 @@ function newRow() {
     total++;
     $('#total').val(total);
     return (
-        `<tr>
+        `<tr id="row${total}">
         <td>
             ${total}
         </td>
@@ -56,3 +33,9 @@ function newRow() {
 $('#addnewrow').click(() => {
     $('#result').append(newRow());
 })
+
+$('#removerow').click(() => {
+    $(`#row${total}`).remove()
+    total--;
+    $('#total').val(total);
+});

@@ -19,7 +19,7 @@ function newrow() {
     totalrows++;
     $('#totalrows').val(totalrows);
     return (
-        `<tr>
+        `<tr id="row${totalrows}">
             <td>
                 <input type="number" class="form-control" name="imeino${totalrows}" required placeholder="Enter IMEI Number">
             </td>
@@ -35,4 +35,11 @@ function newrow() {
 
 $('#addnewrow').click(() => {
     $('#rows').append(newrow())
+});
+
+
+$('#removerow').click(() => {
+    $(`#row${totalrows}`).remove();
+    totalrows--;
+    $('#totalrows').val(totalrows);
 });
