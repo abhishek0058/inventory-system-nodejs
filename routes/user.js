@@ -147,7 +147,8 @@ router.post("/update", (req, res) => {
   const {
     imeino,
     receiverid,
-    senderid
+    senderid,
+    person
   } = req.body;
   const query = `update feedstock set storeid = ?, storename = (select name from store where id = ?) where imeino = ? and storeid = ?`;
   pool.query(
@@ -160,8 +161,8 @@ router.post("/update", (req, res) => {
       } else if (result.affectedRows == 0) {
         res.json(false);
       } else {
-        const transferQuery = `insert into transfers (senderid, receiverid, imeino, date) values (?,?,?,now())`;
-        pool.query(transferQuery, [senderid, receiverid, imeino], (err) => {
+        const transferQuery = `insert into transfers (senderid, receiverid, imeino, date, person) values (?,?,?,now(),?)`;
+        pool.query(transferQuery, [senderid, receiverid, imeino, person], (err) => {
           if (err) {
             console.log(err);
             res.json(false);
