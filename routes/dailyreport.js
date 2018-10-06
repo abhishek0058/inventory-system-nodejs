@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/transfer', (req, res) => {
-    const query = `select t.id, t.person, t.imeino, (select modelno from model where id = (select modelid from feedstock where imeino = t.imeino)) as modelno, (select name from store where id = t.senderid ) as sender, (select name from store where id = t.receiverid ) as receiver, t.date from transfers t where id = CURDATE()`;
+    const query = `select t.id, t.person, t.imeino, (select modelno from model where id = (select modelid from feedstock where imeino = t.imeino)) as modelno, (select name from store where id = t.senderid ) as sender, (select name from store where id = t.receiverid ) as receiver, t.date from transfers t where t.date = CURDATE()`;
     pool.query(query, (err, result) => {
         if(err) {
             console.log(err);
