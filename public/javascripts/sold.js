@@ -1,27 +1,33 @@
+$.getJSON('/store/allJSON', result => {
+    $.each(result, (i, item) => {
+        $("#store").append(`<option value="${item.id}">${item.name}</option>`)
+    })
+});
+
 function makeTable(data) {
     var table = '';
-    console.log(data);
-
     $.each(data, function (i, item) {
-        table += `<tr>
-            <td>${item.id}</td>
-            <td>
-                <a id="${item.storeid}" name="${item.store}" class="store" href="#">
-                    ${item.store}
-                </a>
-            </td>
-            <td>
-                ${item.imeino}
-            </td>
-            <td>
-                ${item.modelno}
-            </td>
-            <td>
-                <a id="${item.date}" class="date" href="#">
-                    ${change_date_formate(item.date)}
-                </a>
-            </td>
-        </tr>`
+        if($('#store').val() == "0" || $('#store').val() == item.storeid) {
+            table += `<tr>
+                <td>${item.id}</td>
+                <td>
+                    <a id="${item.storeid}" name="${item.store}" class="store" href="#">
+                        ${item.store}
+                    </a>
+                </td>
+                <td>
+                    ${item.imeino}
+                </td>
+                <td>
+                    ${item.modelno}
+                </td>
+                <td>
+                    <a id="${item.date}" class="date" href="#">
+                        ${change_date_formate(item.date)}
+                    </a>
+                </td>
+            </tr>`
+        }
     })
 
     $('#result').html(table);
