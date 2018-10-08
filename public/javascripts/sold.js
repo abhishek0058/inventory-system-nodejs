@@ -1,4 +1,5 @@
 var fallBackDate = [];
+
 $.getJSON('/store/allJSON', result => {
     $.each(result, (i, item) => {
         $("#store").append(`<option value="${item.id}">${item.name}</option>`)
@@ -7,13 +8,25 @@ $.getJSON('/store/allJSON', result => {
 
 $('#store').change(() => {
     makeTable(fallBackDate);
-})
+});
+
+
+$.getJSON('/model/allJSON', result => {
+    $.each(result, (i, item) => {
+        $("#model").append(`<option value="${item.modelno}">${item.modelno} - ${item.name}</option>`)
+    })
+});
+
+$('#model').change(() => {
+    makeTable(fallBackDate);
+});
+
 
 function makeTable(data) {
     fallBackDate = data;
     var table = '';
     $.each(data, function (i, item) {
-        if($('#store').val() == "0" || $('#store').val() == item.storeid) {
+        if(($('#store').val() == "0" || $('#store').val() == item.storeid) && ($('#model').val() == "0" || $('#model').val() == item.modelno)) {
             table += `<tr>
                 <td>${item.id}</td>
                 <td>
