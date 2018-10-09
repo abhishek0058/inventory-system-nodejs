@@ -50,14 +50,18 @@ router.get("/color/:id", (req, res) => {
   const {
     id
   } = req.params;
-  pool.query(`SELECT distinct color FROM feedstock where modelid = ?;`, [id], (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json([]);
-    } else {
-      res.status(200).json(result);
+  pool.query(
+    `SELECT distinct color FROM feedstock where modelid = ?;`,
+    [id],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json([]);
+      } else {
+        res.status(200).json(result);
+      }
     }
-  });
+  );
 });
 
 router.get("/store/:id/:color", (req, res) => {
@@ -65,14 +69,18 @@ router.get("/store/:id/:color", (req, res) => {
     id,
     color
   } = req.params;
-  pool.query(`select * from feedstock where modelid = ? and color = ? and storeid != 0;`, [id, color], (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).json([]);
-    } else {
-      res.status(200).json(result);
+  pool.query(
+    `select * from feedstock where modelid = ? and color = ? and storeid != 0;`,
+    [id, color],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json([]);
+      } else {
+        res.status(200).json(result);
+      }
     }
-  });
+  );
 });
 
 router.get("/storeAllButMe/:id", (req, res) => {
@@ -90,17 +98,15 @@ router.get("/storeAllButMe/:id", (req, res) => {
     } else {
       res.status(200).json(result);
     }
-  })
-})
+  });
+});
 
-router.get("/stock/:storeid/:modelid/:color", (req, res) => {
+router.get("/storeAllButMeBarCode/:id", (req, res) => {
   const {
-    storeid,
-    modelid,
-    color
+    id
   } = req.params;
-  const queries = `select count(id) as stock from feedstock where modelid = ? and storeid = ? and color = ?;select * from feedstock where modelid = ? and storeid = ?;select * from store where id = ?;`
-  pool.query(queries, [modelid, storeid, color, modelid, storeid, storeid], (err, result) => {
+  const query = `select id, name from store where id != ?;`;
+  pool.query(query, [id, id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).json([]);
@@ -108,6 +114,27 @@ router.get("/stock/:storeid/:modelid/:color", (req, res) => {
       res.status(200).json(result);
     }
   });
+});
+
+router.get("/stock/:storeid/:modelid/:color", (req, res) => {
+  const {
+    storeid,
+    modelid,
+    color
+  } = req.params;
+  const queries = `select count(id) as stock from feedstock where modelid = ? and storeid = ? and color = ?;select * from feedstock where modelid = ? and storeid = ?;select * from store where id = ?;`;
+  pool.query(
+    queries,
+    [modelid, storeid, color, modelid, storeid, storeid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json([]);
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
 });
 
 router.get("/fetchStores/:mobileid", (req, res) => {
@@ -165,14 +192,18 @@ router.post("/update", (req, res) => {
         res.json(false);
       } else {
         const transferQuery = `insert into transfers (senderid, receiverid, imeino, date, person) values (?,?,?,now(),?)`;
-        pool.query(transferQuery, [senderid, receiverid, imeino, person], (err) => {
-          if (err) {
-            console.log(err);
-            res.json(false);
-          } else {
-            res.json(true);
+        pool.query(
+          transferQuery,
+          [senderid, receiverid, imeino, person],
+          err => {
+            if (err) {
+              console.log(err);
+              res.json(false);
+            } else {
+              res.json(true);
+            }
           }
-        });
+        );
       }
     }
   );
@@ -185,41 +216,39 @@ router.post("/sold", (req, res) => {
     senderid
   } = req.body;
   const query = `update feedstock set storeid = 0, storename = 'Sold' where imeino = ? and storeid = ?;`;
-  pool.query(
-    query,
-    [imeino, senderid],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-        res.json(false);
-      } else if (result.affectedRows == 0) {
-        res.json("not found");
-      } else {
-        const transferQuery = `insert into sold (storeid, imeino, date) values (?,?, CURRENT_DATE())`;
-        pool.query(transferQuery, [senderid, imeino], (err) => {
-          if (err) {
-            console.log(err);
-            res.json(false);
-          } else {
-            res.json("sold");
-          }
-        });
-      }
+  pool.query(query, [imeino, senderid], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.json(false);
+    } else if (result.affectedRows == 0) {
+      res.json("not found");
+    } else {
+      const transferQuery = `insert into sold (storeid, imeino, date) values (?,?, CURRENT_DATE())`;
+      pool.query(transferQuery, [senderid, imeino], err => {
+        if (err) {
+          console.log(err);
+          res.json(false);
+        } else {
+          res.json("sold");
+        }
+      });
     }
-  );
+  });
 });
 
-router.get('/dailyReportSold/:storeid', (req, res) => {
-  const { storeid } = req.params;
+router.get("/dailyReportSold/:storeid", (req, res) => {
+  const {
+    storeid
+  } = req.params;
   const query = `select s.*, (select modelno from model where id = (select modelid from feedstock where imeino = s.imeino)) as modelno from sold s where storeid = ? and date = CURDATE()`;
   pool.query(query, [storeid], (err, result) => {
-    if(err) {
+    if (err) {
       console.log(err);
       res.status(500).json([]);
     } else {
       res.status(200).json(result);
     }
-  })
-})
+  });
+});
 
 module.exports = router;
