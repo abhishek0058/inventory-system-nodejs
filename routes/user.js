@@ -83,7 +83,10 @@ router.get("/storeAllButMe/:id", (req, res) => {
   pool.query(query, [id, id], (err, result) => {
     if (err) {
       console.log(err);
-      res.status(500).json([[],[]]);
+      res.status(500).json([
+        [],
+        []
+      ]);
     } else {
       res.status(200).json(result);
     }
@@ -205,5 +208,18 @@ router.post("/sold", (req, res) => {
     }
   );
 });
+
+router.get('/dailyReportSold/:storeid', (req, res) => {
+  const { storeid } = req.params;
+  const query = `select s.*, (select modelno from model where id = (select modelid from feedstock where imeino = s.imeino)) as modelno from sold s where storeid = ? and date = CURDATE()`;
+  pool.query(query, [storeid], (err, result) => {
+    if(err) {
+      console.log(err);
+      res.status(500).json([]);
+    } else {
+      res.status(200).json(result);
+    }
+  })
+})
 
 module.exports = router;
