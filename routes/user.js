@@ -251,4 +251,34 @@ router.get("/dailyReportSold/:storeid", (req, res) => {
   });
 });
 
+router.post("/productReturn", (req, res) => {
+  console.log(req.body);
+  const {
+    imeino,
+    storeid,
+    reason
+  } = req.body;
+
+  const auth = `select imeino from sold where imeino = ? and storeid = ? and status = 'fresh'`;
+
+  pool.query(auth, [imeino, storeid], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json(false);
+    } else if (result.length == 0) {
+      res.status(200).json("not found");
+    } else if (result.length > 0) {
+      const bigQuery = `update feedstock set selled = 'false', storeid = ?, storename = (select name from store where id = ?) where imeino = ? and storeid = ?;insert into returns(storeid, imeino, date, reason) values (?, ?, now(), ?);update sold set status = 'history' where imeino = ? and storeid = ?`;
+      pool.query(bigQuery, [storeid, storeid, imeino, storeid, storeid, imeino, reason, imeino, storeid], (err, result) => {
+        if (err) {
+          console.log(err);
+          res.json(false);
+        } else {
+          res.json("true");
+        }
+      });
+    }
+  });
+
+})
 module.exports = router;

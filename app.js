@@ -15,6 +15,7 @@ var feedstock = require('./routes/feedstock');
 var stock = require('./routes/stock');
 var transfers = require('./routes/transfers');
 var sold = require('./routes/sold');
+var returns = require('./routes/returns');
 var search=require('./routes/search');
 var dailyreport=require('./routes/dailyreport');
 
@@ -49,6 +50,7 @@ app.use('/feedstock', feedstock);
 app.use('/stock', stock);
 app.use('/transfers', transfers);
 app.use('/sold', sold);
+app.use('/returns', returns);
 app.use('/search',search);
 app.use('/dailyreport',dailyreport);
 
