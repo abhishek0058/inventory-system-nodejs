@@ -31,20 +31,31 @@
                             </div>
                             <div class="card-body" style="margin-top: 15px; margin-left: 50px">
                                 <div class="row" style="width: 50%">
+                                    <div class="col-6">
+                                        <h3>
+                                            Choose Date
+                                        </h3>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="date" id="date" class="form-control" />
+                                    </div>
+
+                                </div>
+                                <div class="row" style="width: 50%">
                                     <h3>
                                         Choose Category
                                     </h3>
                                 </div>
                                 <div class="row" style="height: 50%; width: 50%">
                                     <div class="col-md-6">
-                                        <a href="/dailyreport/transfer">
-                                            <h4>Transfers</h4>
-                                        </a>
+                                        <button class="btn btn-danger" id="transfers">
+                                            Transfers
+                                        </button>
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="/dailyreport/sold">
-                                            <h4>Sold</h4>
-                                        </a>
+                                        <button class="btn btn-danger" id="sold">
+                                            Sold
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -76,6 +87,7 @@
     <script src="/assets/js/plugins/bootstrap-notify.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="/assets/js/material-dashboard.min.js?v=2.1.0" type="text/javascript"></script>
+    <script src="/javascripts/dailyreport.js" type="text/javascript"></script>
 </body>
 
 </html>

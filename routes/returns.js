@@ -58,7 +58,7 @@ router.get('/store/:id', (req, res) => {
         }
     })
     console.log(sql);
-    
+
 });
 
 
@@ -76,7 +76,7 @@ router.get('/onDate/:date', (req, res) => {
         }
     })
     console.log(sql);
-    
+
 });
 
 module.exports = router;

@@ -268,7 +268,7 @@ router.post("/productReturn", (req, res) => {
     } else if (result.length == 0) {
       res.status(200).json("not found");
     } else if (result.length > 0) {
-      const bigQuery = `update feedstock set selled = 'false', storeid = ?, storename = (select name from store where id = ?) where imeino = ? and storeid = ?;insert into returns(storeid, imeino, date, reason) values (?, ?, now(), ?);update sold set status = 'history' where imeino = ? and storeid = ?`;
+      const bigQuery = `update feedstock set selled = 'false', storeid = ?, storename = (select name from store where id = ?) where imeino = ?;insert into returns(storeid, imeino, date, reason) values (?, ?, now(), ?);update sold set status = 'history' where imeino = ? and storeid = ?`;
       pool.query(bigQuery, [storeid, storeid, imeino, storeid, storeid, imeino, reason, imeino, storeid], (err, result) => {
         if (err) {
           console.log(err);
