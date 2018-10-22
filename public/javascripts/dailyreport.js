@@ -10,6 +10,7 @@ $('#sold').click(() => {
 
 
 $('#transfers').click(() => {
+    const date = $('#date').val();
     if ($('#date').val() == "") {
         alert('Please Enter a date');
         return;
