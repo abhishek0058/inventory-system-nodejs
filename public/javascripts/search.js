@@ -29,26 +29,33 @@ function showNormalDetails(data) {
                 <td>${details.color}</td>
             </tr>
         </table>`
-        console.log(table)
         $('#details').html(table)
     }
 }
 
 function showSoldDetails(data) {
     if (data.length > 0) {
+
+        console.log(data)
+
         details = data[0];
         var table = `
         <h3>SOLD Details</h3>
         <table class="table">
         <tr>
-            <td>Sold From: </td>
-            <td>${details.storename}</td>
-        </tr>
-        <tr>
-            <td>Date: </td>
-            <td>${change_date_formate(details.date)}</td>
-        </tr>
-        </table>`;
+            <th>Sold From</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>`
+        $.each(data, function(i, item) {
+            table += `<tr>
+            <td>${item.storename}</td>
+            <td>${change_date_formate(item.date)}</td>
+            <td>${item.status}</td>
+        </tr>`;
+        
+        });
+        `</table>`;
         $('#sold_details').html(table)
     } else {
         $('#sold_details').html(`<h3>Not Sold Yet.</h3>`)        
