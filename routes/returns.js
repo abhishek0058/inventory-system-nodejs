@@ -9,7 +9,7 @@ router.get('*', (req, res, next) => {
     if (req.session.adminId)
         next()
     else
-        req.redirect('/admin')
+        res.redirect('/admin')
 })
 
 router.get('/', (req, res) => {
