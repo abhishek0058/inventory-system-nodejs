@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('./pool');
+const json2xls = require('json2xls');
+
+router.use(json2xls.middleware);
 
 const table = 'feedstock';
 
@@ -9,7 +12,7 @@ router.get('*', (req, res, next) => {
     if (req.session.adminId)
         next()
     else
-        req.redirect('/admin')
+        res.redirect('/admin')
 })
 
 router.get('/', (req, res) => {
@@ -130,6 +133,18 @@ router.get('/delete/:id', (req, res) => {
         if (err) throw err;
         else {
             all(res)
+        }
+    })
+})
+
+router.get('/excel-sheet', (req, res) => {
+    const query = 'SELECT (select name from model where feedstock.modelid = id) as model, count(id) as units, storename, color FROM feedstock where storeid != 0 group by  model, storename, color order by model';
+    pool.query(query, (err, result) => {
+        if(err) {
+            res.json(err);
+        }
+        else {
+            res.xls(`Available Stock - ${(new Date()).toLocaleDateString()}.xlsx`, result);
         }
     })
 })
