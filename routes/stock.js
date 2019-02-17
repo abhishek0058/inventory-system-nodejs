@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/storeAndIMEINumbers', (req, res) => {
-    const queries = `select * from store; select imeino from feedstock where storeid = 0;`
+    const queries = `select * from store;SELECT imeino FROM feedstock where storeid = 0 and storename = "Not distributed";`
     pool.query(queries, (err, result) => {
         if (err) {
             console.log(err)
@@ -56,7 +56,11 @@ router.post('/bulk', (req, res) => {
                 console.log(err);
                 res.send(`An Error Occurred`);
             } else {
-                res.send(`<h3 style="color: green">Distribution Successful.</h3>`);
+                const responseString = `<h3 style="color: green; margin: 30px">
+                    Distribution Successful
+                    <a href="/stock"><span style="padding: 20px">Click Here</span></a>
+                </h3>`
+                res.send(`<h3 style="color: green">Distribution Successful</h3>`);
             }
         })
     }
