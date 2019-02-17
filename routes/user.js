@@ -271,9 +271,9 @@ router.post("/productReturn", (req, res) => {
 router.post("/demand", (req, res) => {
   try {
     const { qty, note, current_store_id, receiver_store_id, modelid, color } = req.body;
-    const query = `insert into demand (original_qty, note, senderid, receiverid, modelid, color, created_date, updated_date) values(?,?,?,?,?,?,CURDATE(),CURDATE());`
+    const query = `insert into demand (original_qty, current_qty, note, senderid, receiverid, modelid, color, created_date, updated_date) values(?,?,?,?,?,?,CURDATE(),CURDATE());`
     console.log('ree', req.body);
-    pool.query(query, [qty, note, current_store_id, receiver_store_id, modelid, color], (err, result) => {
+    pool.query(query, [qty, qty, note, current_store_id, receiver_store_id, modelid, color], (err, result) => {
       if(err) {
         console.log('/user/demand', err);
         res.json({ result: false, message: 'Internal server error' })
