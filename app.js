@@ -18,7 +18,7 @@ var sold = require('./routes/sold');
 var returns = require('./routes/returns');
 var search = require('./routes/search');
 var dailyreport = require('./routes/dailyreport');
-
+var demand = require('./routes/demand');
 var app = express();
 
 // view engine setup
@@ -53,6 +53,7 @@ app.use('/sold', sold);
 app.use('/returns', returns);
 app.use('/search', search);
 app.use('/dailyreport', dailyreport);
+app.use('/demand', demand);
 
 
 // catch 404 and forward to error handler
