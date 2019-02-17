@@ -32,11 +32,10 @@ router.get("/brands", (req, res) => {
   });
 });
 
-router.get("/model/:id", (req, res) => {
-  const {
-    id
-  } = req.params;
-  pool.query(`select * from model where brandid = ?;`, [id], (err, result) => {
+router.get("/model/:id/:storeid", (req, res) => {
+  const { id, storeid } = req.params;
+  const query = `select m.id, m.brandid, m.name, m.modelno, (select count(id) from feedstock where modelid = m.id and storeid != 0 and storeid != ?) as count from model m where m.brandid = ?;`
+  pool.query(query, [storeid, id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).json([]);
@@ -46,14 +45,10 @@ router.get("/model/:id", (req, res) => {
   });
 });
 
-router.get("/color/:id", (req, res) => {
-  const {
-    id
-  } = req.params;
-  pool.query(
-    `SELECT distinct color FROM feedstock where modelid = ?;`,
-    [id],
-    (err, result) => {
+router.get("/color/:id/:storeid", (req, res) => {
+  const { id, storeid } = req.params;
+  const query = `SELECT distinct f.color, (select count(id) from feedstock where modelid = f.modelid and storeid != 0 and storeid != ? and color = f.color) as count FROM feedstock f where f.modelid = ?;`
+  pool.query(query, [storeid, id], (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).json([]);
@@ -84,17 +79,12 @@ router.get("/store/:id/:color", (req, res) => {
 });
 
 router.get("/storeAllButMe/:id", (req, res) => {
-  const {
-    id
-  } = req.params;
+  const { id } = req.params;
   const query = `select id, name from store where id != ?;select imeino from feedstock where storeid = ? order by imeino;`;
   pool.query(query, [id, id], (err, result) => {
     if (err) {
       console.log(err);
-      res.status(500).json([
-        [],
-        []
-      ]);
+      res.status(500).json([ [], [] ]);
     } else {
       res.status(200).json(result);
     }
@@ -174,12 +164,7 @@ router.get("/fetchStock/:mobileid/:storeid", (req, res) => {
 });
 
 router.post("/update", (req, res) => {
-  const {
-    imeino,
-    receiverid,
-    senderid,
-    person
-  } = req.body;
+  const { imeino, receiverid, senderid, person } = req.body;
   const query = `update feedstock set storeid = ?, storename = (select name from store where id = ?) where imeino = ? and storeid = ?`;
   pool.query(
     query,
@@ -237,9 +222,7 @@ router.post("/sold", (req, res) => {
 });
 
 router.get("/dailyReportSold/:storeid", (req, res) => {
-  const {
-    storeid
-  } = req.params;
+  const { storeid } = req.params;
   const query = `select s.*, (select modelno from model where id = (select modelid from feedstock where imeino = s.imeino)) as modelno from sold s where storeid = ? and date = CURDATE()`;
   pool.query(query, [storeid], (err, result) => {
     if (err) {
@@ -283,5 +266,25 @@ router.post("/productReturn", (req, res) => {
     }
   });
 
+})
+
+router.post("/demand", (req, res) => {
+  try {
+    const { qty, note, current_store_id, receiver_store_id, modelid, color } = req.body;
+    const query = `insert into demand (original_qty, note, senderid, receiverid, modelid, color, created_date, updated_date) values(?,?,?,?,?,?,CURDATE(),CURDATE());`
+    console.log('ree', req.body);
+    pool.query(query, [qty, note, current_store_id, receiver_store_id, modelid, color], (err, result) => {
+      if(err) {
+        console.log('/user/demand', err);
+        res.json({ result: false, message: 'Internal server error' })
+      }
+      else {
+        res.json({ result: true });
+      }
+    });
+  } catch(e) {
+    console.log(e);
+    res.json({ result: false, message: 'Internal Error Occurred' });
+  }
 })
 module.exports = router;

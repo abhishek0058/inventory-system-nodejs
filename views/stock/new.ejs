@@ -29,9 +29,10 @@
                                 <h4 class="card-title">Stocks</h4>
                                 <p class="card-category">Update Stock Here</p>
                             </div>
+                            <h3 id="loading_div" style="color: green; margin-left: 30px; margin-right: 30px">Loading .... Stores & IMEINOs</h3>
                             <form action="/stock/bulk" method="post">
                                 <input type="hidden" name="total" id="total">
-                                <div class="card-body">
+                                <div class="card-body" id="form_body">
                                     <div class="row">
                                         <div class="col-md-8">
                                             <div class="form-group">
@@ -56,14 +57,16 @@
                                         </tbody>
                                     </table>
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <button type="button" id="addnewrow" class="btn btn-info pull-right">Add New Row</button>
+                                        <div class="col-md-3">
+                                            <button type="button" id="addnewrow" class="btn btn-info pull-right"> + Add New Row</button>
                                         </div>
-                                        <div class="col-md-4">
-                                            <button type="button" id="removerow" class="btn btn-danger pull-right">Remove Row</button>
+                                        <div class="col-md-3">
+                                            <button type="button" id="removerow" class="btn btn-danger pull-right"> - Remove Row</button>
                                         </div>
-                                        <div class="col-md-4">
-                                            <button type="submit" class="btn btn-primary pull-right">Assign</button>
+                                        <div class="col-md-6">
+                                            <button type="submit" class="btn btn-primary btn-large pull-right">
+                                                <span style="font-size: 20px">Distribute Stock</span>
+                                            </button>
                                         </div>
                                     </div>
                                     <datalist id="imeinumbers"></datalist>
@@ -81,8 +84,6 @@
     <script src="/assets/js/core/popper.min.js" type="text/javascript"></script>
     <script src="/assets/js/core/bootstrap-material-design.min.js" type="text/javascript"></script>
     <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <!--  Google Maps Plugin    -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
     <!-- Chartist JS -->
     <script src="/assets/js/plugins/chartist.min.js"></script>
     <!--  Notifications Plugin    -->

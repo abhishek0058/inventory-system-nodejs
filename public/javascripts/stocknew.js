@@ -1,6 +1,8 @@
 var imeinumbers = [];
-
+$("#form_body").hide()
 $.getJSON(`/stock/storeAndIMEINumbers`, result => {
+    $('#loading_div').hide()
+    $("#form_body").show()
     $.each(result[0], (i, item) =>
         $("#store").append(`<option value="${item.id}">${item.name}</option>`))
     $.each(result[1], (i, item) =>

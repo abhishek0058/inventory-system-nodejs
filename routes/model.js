@@ -5,7 +5,7 @@ const pool = require('./pool');
 const table = 'model'
 
 
-router.get('*', (req, res, next) => {
+router.all('*', (req, res, next) => {
     if (req.session.adminId)
         next()
     else
