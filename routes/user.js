@@ -45,10 +45,11 @@ router.get("/model/:id/:storeid", (req, res) => {
   });
 });
 
-router.get("/color/:id/:storeid", (req, res) => {
-  const { id, storeid } = req.params;
-  const query = `SELECT distinct f.color, (select count(id) from feedstock where modelid = f.modelid and storeid != 0 and storeid != ? and color = f.color) as count FROM feedstock f where f.modelid = ?;`
-  pool.query(query, [storeid, id], (err, result) => {
+router.get("/color/:modelid/:storeid", (req, res) => {
+  const { modelid, storeid } = req.params;
+  // (select count(id) from feedstock where modelid = f.modelid and storeid != 0 and storeid != f.storeid and color = f.color) as count 
+  const query = `SELECT f.color, count(id) as count FROM feedstock f where f.modelid = ? and f.storeid != 0 and f.storeid != ? group by f.color;`
+  pool.query(query, [modelid, storeid], (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).json([]);
@@ -60,12 +61,8 @@ router.get("/color/:id/:storeid", (req, res) => {
 });
 
 router.get("/store/:id/:color", (req, res) => {
-  const {
-    id,
-    color
-  } = req.params;
-  pool.query(
-    `select * from feedstock where modelid = ? and color = ? and storeid != 0;`,
+  const { id, color }  = req.params;
+  pool.query(`select * from feedstock where modelid = ? and color = ? and storeid != 0;`,
     [id, color],
     (err, result) => {
       if (err) {
@@ -78,6 +75,26 @@ router.get("/store/:id/:color", (req, res) => {
   );
 });
 
+router.get("/store/:modelid/:color/:storeid", (req, res) => {
+  const { modelid, color, storeid }  = req.params;
+  // (select count(id) from feedstock where modelid = f.modelid and storeid != 0 and storeid != ? and color = f.color) as count,
+  const query = `SELECT f.color, count(id) as count, (select name from store where id = f.storeid) as storename, f.storeid, f.modelid
+    FROM feedstock f where f.modelid = ? and  f.color = ? and f.storeid != 0 and f.storeid != ? group by f.storeid;`
+  pool.query(query, [modelid, color, storeid], (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json([]);
+      } else {
+        res.status(200).json(result);
+      }
+    }
+  );
+});
+
+// router.get("/demand-all/:storeid", (req, res) => {
+//   const { storeid } = req.params;
+//   const query = `select * from demand d where d.storeid`
+// })
 router.get("/storeAllButMe/:id", (req, res) => {
   const { id } = req.params;
   const query = `select id, name from store where id != ?;select imeino from feedstock where storeid = ? order by imeino;`;
@@ -271,7 +288,9 @@ router.post("/productReturn", (req, res) => {
 router.post("/demand", (req, res) => {
   try {
     const { qty, note, current_store_id, receiver_store_id, modelid, color } = req.body;
-    const query = `insert into demand (original_qty, current_qty, note, senderid, receiverid, modelid, color, created_date, updated_date) values(?,?,?,?,?,?,CURDATE(),CURDATE());`
+    const query = `insert into demand 
+        (original_qty, current_qty, note, senderid, receiverid, modelid, color, created_date, updated_date) 
+        values(?, ?, ?, ?, ?, ?, ?, CURDATE(),CURDATE());`
     console.log('ree', req.body);
     pool.query(query, [qty, qty, note, current_store_id, receiver_store_id, modelid, color], (err, result) => {
       if(err) {
