@@ -138,7 +138,7 @@ router.get('/delete/:id', (req, res) => {
 })
 
 router.get('/excel-sheet', (req, res) => {
-    const query = 'SELECT storename, (select name from model where feedstock.modelid = id) as model, count(id) as units, color FROM feedstock where storeid != 0 group by  model, storename, color order by storename';
+    const query = 'SELECT storename, (select name from model where feedstock.modelid = id) as model, count(id) as units, color FROM feedstock where storeid != 0 group by  model, storename, color order by storename, model';
     pool.query(query, (err, result) => {
         if(err) {
             res.json(err);
