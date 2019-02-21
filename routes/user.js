@@ -34,8 +34,8 @@ router.get("/brands", (req, res) => {
 
 router.get("/model/:id/:storeid", (req, res) => {
   const { id, storeid } = req.params;
-  const query = `select m.id, m.brandid, m.name, m.modelno, (select count(id) from feedstock where modelid = m.id and storeid != 0 and storeid != ?) as count from model m where m.brandid = ?;`
-  pool.query(query, [storeid, id], (err, result) => {
+  const query = `select m.id, m.brandid, m.name, m.modelno, (select count(id) from feedstock where modelid = m.id and storeid != 0) as count from model m where m.brandid = ?;`
+  pool.query(query, [id], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).json([]);
@@ -48,8 +48,8 @@ router.get("/model/:id/:storeid", (req, res) => {
 router.get("/color/:modelid/:storeid", (req, res) => {
   const { modelid, storeid } = req.params;
   // (select count(id) from feedstock where modelid = f.modelid and storeid != 0 and storeid != f.storeid and color = f.color) as count 
-  const query = `SELECT f.color, count(id) as count FROM feedstock f where f.modelid = ? and f.storeid != 0 and f.storeid != ? group by f.color;`
-  pool.query(query, [modelid, storeid], (err, result) => {
+  const query = `SELECT f.color, count(id) as count FROM feedstock f where f.modelid = ? and f.storeid != 0 group by f.color;`
+  pool.query(query, [modelid], (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).json([]);
@@ -79,8 +79,8 @@ router.get("/store/:modelid/:color/:storeid", (req, res) => {
   const { modelid, color, storeid }  = req.params;
   // (select count(id) from feedstock where modelid = f.modelid and storeid != 0 and storeid != ? and color = f.color) as count,
   const query = `SELECT f.color, count(id) as count, (select name from store where id = f.storeid) as storename, f.storeid, f.modelid
-    FROM feedstock f where f.modelid = ? and  f.color = ? and f.storeid != 0 and f.storeid != ? group by f.storeid;`
-  pool.query(query, [modelid, color, storeid], (err, result) => {
+    FROM feedstock f where f.modelid = ? and  f.color = ? and f.storeid != 0 group by f.storeid;`
+  pool.query(query, [modelid, color], (err, result) => {
       if (err) {
         console.log(err);
         res.status(500).json([]);
