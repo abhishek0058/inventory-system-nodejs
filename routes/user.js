@@ -22,7 +22,8 @@ router.post("/login", function (req, res, next) {
 });
 
 router.get("/brands", (req, res) => {
-  pool.query(`select * from brand;`, (err, result) => {
+  const brandsWithStock = `select * from brand where id in (select distinct brandid from feedstock where storeid != 0);`;
+  pool.query(brandsWithStock, (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).json([]);
