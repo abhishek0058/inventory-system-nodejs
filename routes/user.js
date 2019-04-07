@@ -45,6 +45,20 @@ router.get("/brands", (req, res) => {
   });
 });
 
+router.get("/brands/:categoryid", (req, res) => {
+  const { categoryid } = req.params;
+  const brandsWithStock = `select * from brand where id in (select distinct brandid from feedstock where storeid != 0) 
+    and categoryid = ${categoryid};`;
+  pool.query(brandsWithStock, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json([]);
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 router.get("/model/:id/:storeid", (req, res) => {
   const { id, storeid } = req.params;
   const query = `select m.id, m.brandid, m.name, m.modelno, (select count(id) from feedstock where modelid = m.id and storeid != 0) as count from model m where m.brandid = ?;`
