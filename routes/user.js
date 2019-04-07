@@ -21,6 +21,18 @@ router.post("/login", function (req, res, next) {
   );
 });
 
+router.get("/categories", (req, res) => {
+  const allCategories = `select * from categories`;
+  pool.query(allCategories, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json([]);
+    } else {
+      res.status(200).json(result);
+    }
+  })
+});
+
 router.get("/brands", (req, res) => {
   const brandsWithStock = `select * from brand where id in (select distinct brandid from feedstock where storeid != 0);`;
   pool.query(brandsWithStock, (err, result) => {
