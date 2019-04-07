@@ -26,8 +26,11 @@ router.post('/create', (req, res) => {
 })
 
 function all(res) {
-    pool.query(`select * from ${table}`, (err, result) => {
-        if (err) throw err;
+    const query = `select id, name, (select name from categories where t.categoryid = id) as categoryname from ${table} t`;
+    pool.query(query, (err, result) => {
+        if (err) { 
+            throw err;
+        }
         else {
             res.render(`${table}/all`, {
                 data: result
@@ -96,9 +99,7 @@ router.post('/update', (req, res) => {
 
 
 router.get('/delete/:id', (req, res) => {
-    const {
-        id
-    } = req.params;
+    const { id } = req.params;
     pool.query(`delete from ${table} where id = ?`, id, (err, result) => {
         if (err) throw err;
         else {
