@@ -54,12 +54,26 @@ router.get('/allJSON', (req, res) => {
 
 router.get('/delete/:id', (req, res) => {
     const { id } = req.params;
-    pool.query(`delete from ${table} where id = ?`, id, (err, result) => {
-        if (err) throw err;
-        else {
-            all(res)
+    const queryCheckBrandAssociation = `select * from brand where categoryid = ${id}`;
+    pool.query(queryCheckBrandAssociation, (err, brands) => {
+        if(err) {
+            return res.send("Internal error occurred");
         }
-    })
+        else if(brands.length) {
+            return res.send(`<h3>
+                You have ${brands.length} brand associated to this category. Please change their category first.
+                <a href="/brand/all">change</a>
+            </h3>`);
+        }
+        else if(brands.length == 0) {
+            pool.query(`delete from ${table} where id = ?`, id, (err, result) => {
+                if (err) throw err;
+                else {
+                    all(res)
+                }
+            });
+        }
+    });
 });
 
 module.exports = router;
