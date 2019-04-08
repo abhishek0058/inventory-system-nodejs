@@ -55,12 +55,23 @@ router.get('/allJSON', (req, res) => {
         }
     })
 })
+// 
 
+router.get('/allJSONWithCategoryName', (req, res) => {
+    const query = `select id, name, (select name from categories where t.categoryid = id) as categoryname from ${table} t`;
+    pool.query(query, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(200).json([])
+        }
+        else {
+            res.json(result)
+        }
+    })
+});
 
 router.get('/details/:id', (req, res) => {
-    const {
-        id
-    } = req.params;
+    const { id } = req.params;
     const queries = `select s.*, st.address, st.name as storename, m.name, m.modelno, m.color from stock s, store st, mobile m where s.storeid = st.id and s.mobileid = m.id and s.mobileid in (select id from mobile where companyid = ?);` 
         +   `select name from company where id = ?;`
     pool.query(queries, [id, id], (err, result) => {
