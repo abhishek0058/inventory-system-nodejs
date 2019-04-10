@@ -21,7 +21,7 @@ function newrow() {
     return (
         `<tr id="row${totalrows}">
             <td>
-                <input type="number" class="form-control" name="imeino${totalrows}" required placeholder="Enter IMEI Number">
+                <input type="text" class="form-control" name="imeino${totalrows}" required placeholder="Enter IMEI Number">
             </td>
             <td>
                 <input type="number" class="form-control" name="price${totalrows}" placeholder="Price (Optional)">
