@@ -24,7 +24,7 @@ function newRow() {
             ${total}
         </td>
             <td>
-            <input name="imeino${total}" type="number" class="form-control" placeholder="Enter IMEI Number"
+            <input name="imeino${total}" type="text" class="form-control" placeholder="Enter IMEI Number"
             list="imeinumbers" required>
             </td>
         </tr>
