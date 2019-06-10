@@ -3,9 +3,10 @@ const router = require('express').Router();
 var schedule = require('node-schedule');
 var exec = require('child_process').exec;
 
+const shellScript = `mysqldump -u root -p${process.env.DB_PASSWORD} ${process.env.DB_PROJECT} > db_backup.sql`;
 
-var j = schedule.scheduleJob({ minute: 0, hour: 0 }, function(){
-    var child = exec('mysqldump -u root -p inventory > dumpfilename.sql');
+var j = schedule.scheduleJob({ second: 0 }, function(){
+    var child = exec(shellScript);
 });
 
 
