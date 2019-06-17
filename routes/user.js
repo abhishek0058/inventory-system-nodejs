@@ -1,24 +1,64 @@
 var express = require("express");
 var router = express.Router();
 var pool = require("./pool");
+const jwt = require('./jwt');
 
 router.post("/login", function (req, res, next) {
-  const {
-    username,
-    password
-  } = req.body;
-  pool.query(
-    `select * from store where username = ? and password = ?`,
-    [username, password],
-    (err, result) => {
+  const { username, password } = req.body;
+  pool.query(`select * from store where username = ? and password = ?`, 
+      [username, password], 
+      async (err, result) => {
       if (err) {
         console.log(err);
-        res.status(500).json([]);
       } else {
-        res.status(200).json(result);
+        console.log("result", result);
+        try {
+          if(result.length == 0) return res.status(500).json([]);
+          const userId = result[0].id;
+          const token = await jwt.createToken(userId);
+          console.log("token", token);
+          
+          if(!token) throw new Error("Internal error occurred");
+          
+          const addInLoggedInUser = `Insert IGNORE into loggedInUsers (userid, token) values(?, ?)`;
+          pool.query(addInLoggedInUser, [userId, token], (err, result) => {
+            if(err) {
+              console.log('addInLoggedInUser', err);
+            }
+            else {
+              console.log('result', result);
+            }
+          });
+          res.status(200).json({result, token });
+        } catch(err) {
+          console.log("err", err);
+          res.status(500).json([]);
+        }
       }
     }
   );
+});
+
+
+router.all('*', jwt.verify, (req, res, next) => {
+  next();
+})
+
+router.get('/logout', (req, res) => {
+  try {
+    const token = req.headers.auth;
+    const deleteFromLoggedInUsers = `Delete from loggedInUsers where token = ?`;
+    pool.query(deleteFromLoggedInUsers, [token], (err, result) => {
+      if(err) {
+        console.log("deleteFromLoggedInUsers", err);
+      }
+      
+      res.json({ status: true });
+    });
+  } catch(err) {
+    console.log("err", err);
+    return res.json({ status: true });
+  }
 });
 
 router.get("/categories", (req, res) => {
