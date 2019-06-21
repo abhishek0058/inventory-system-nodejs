@@ -22,6 +22,7 @@ var dailyreport = require('./routes/dailyreport');
 var demand = require('./routes/demand');
 var categories = require('./routes/categories');
 var backup = require('./routes/backup');
+var loggedInUsers = require('./routes/loggedInUsers');
 var app = express();
 
 // view engine setup
@@ -59,6 +60,7 @@ app.use('/dailyreport', dailyreport);
 app.use('/demand', demand);
 app.use('/categories', categories);
 app.use('/backup', backup);
+app.use('/loggedInUsers', loggedInUsers);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

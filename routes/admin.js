@@ -30,7 +30,7 @@ router.post('/checkLogin', (req, res) => {
         password
     } = req.body;
     console.log(req.body)
-    var sql = pool.query(`select * from admin where id = ? and password = ?`, [id, password], (err, result) => {
+    var sql = pool.query(`select * from admin where username = ? and password = ?`, [id, password], (err, result) => {
         if (err) throw err;
         else if (result.length) {
             req.session.adminId = result[0].id;
