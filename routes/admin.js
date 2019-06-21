@@ -14,16 +14,6 @@ router.get('/home', (req, res) => {
     }
 })
 
-router.get('/', (req, res) => {
-    if (req.session.adminId) {
-        res.redirect('/admin/home')
-    } else {
-        res.render('admin/login', {
-            msg: "Please Login"
-        })
-    }
-})
-
 router.post('/checkLogin', (req, res) => {
     const {
         id,
@@ -50,6 +40,54 @@ router.post('/checkLogin', (req, res) => {
 router.get('/logout', (req, res) => {
     req.session.adminId = null;
     res.redirect('/admin')
+});
+
+router.get('/', (req, res) => {
+    if (req.session.adminId) {
+        res.redirect('/admin/home')
+    } else {
+        res.render('admin/login', {
+            msg: "Please Login"
+        })
+    }
+});
+
+router.get('/change-password', (req, res) => {
+    res.render('admin/changePassword');
 })
+
+router.post('/change-password', (req, res) => {
+    try {
+        const { confirm_password, password, current_password } = req.body;
+        if(confirm_password != password) {
+            return res.send("Password and confirm password is not same")
+        }
+        pool.query(`select * from admin where password = ?`, current_password, (err, result) => {
+            if(err) {
+                console.log("err", err);
+                res.send('Internal error occurred');
+            }
+            else if(result.length == 1) {
+                const data = { password };
+                const query = `update admin set ?`;
+                pool.query(query, data, (err, result) => {
+                    if(err) {
+                        console.log("err", err);
+                        res.send('There is some problem completing your request.');
+                    }
+                    else {
+                        res.send("<h2>Successfully changed</h2>");
+                    }
+                });
+            }
+            else {
+                res.send("Current password is incorrect");
+            }
+        })
+    } catch (error) {
+        console.log("error", error);
+        res.send('There is some problem completing your request.');
+    }
+});
 
 module.exports = router;
